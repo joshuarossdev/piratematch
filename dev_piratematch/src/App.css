@@ -17,9 +17,10 @@ header {
     font-size: 1.7rem;
 }
 
-.card {
+.card{
     height: 20vmin;
-    background-image: url("./images/pirate.png");
+    width: 20vmin;
+    background-color: red;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -30,9 +31,6 @@ header {
 .card-back {
     height: 100%;
     width: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
     position: absolute;
 }
 
