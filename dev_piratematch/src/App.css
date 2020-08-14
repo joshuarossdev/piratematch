@@ -21,9 +21,6 @@ header {
     height: 20vmin;
     width: 20vmin;
     background-color: red;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
     position: relative;
 }
 
@@ -31,8 +28,17 @@ header {
 .card-back {
     height: 100%;
     width: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
     position: absolute;
 }
+
+.card-back {
+  background-image: url('./images/pirate.png');
+}
+
+.
 
 .col-1 {
         width: 8%;

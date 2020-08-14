@@ -5,10 +5,9 @@ function Card(props) {
   return (
     <div className="card" >
       <div
-        className="card-front col-2">
-          <br></br>{props.cardFront}
+        className={`${props.cardFront}`}>
       </div>
-      <div className="card-back">back</div>
+      <div className="card-back"></div>
     </div>
   );
 }
