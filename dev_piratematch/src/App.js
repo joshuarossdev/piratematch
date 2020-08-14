@@ -4,7 +4,7 @@ import './App.css';
 function Card(props) {
   return (
     <div className="card" >
-      <div className="card-front"><br></br>{props.card}</div>
+      <div className="card-front"><br></br>{props.cardFront}</div>
   <div className="card-back">back</div>
     </div>
   );
@@ -15,17 +15,28 @@ class Board extends React.Component {
   render() {
    const deck = shuffleCards().map((card) => {
       return (
-        <div key="card">
+        <main>
+          <Card
+            key={card}
+            cardFront={card}
+          />
+        </main>
 
-        </div>
       );
     })
 
     return (
         <div>
-          <Card card="front"/>
+         {deck}
         </div>
     );
+  }
+}
+
+class Game extends React.Component {
+  constructor(props) {
+    super(props);
+
   }
 }
 
