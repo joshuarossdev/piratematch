@@ -21,16 +21,56 @@ header {
     height: 20vmin;
     width: 20vmin;
     background-color: red;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
     position: relative;
+}
+
+.card-back {
+  background-image: url('./images/pirate.png');
+}
+
+.barrel {
+  background-image: url('./images/barrel.png');
+}
+
+.cannon
+{
+  background-image: url('./images/cannon.png');
+}
+.compass {
+  background-image: url('./images/compass.png');
+}
+
+.flag {
+  background-image: url('./images/flag.png');
+}
+
+.mermaid {
+  background-image: url('./images/mermaid.png');
+}
+
+.telescope {
+  background-image: url('./images/telescope.png');
+}
+
+.palm {
+  background-image: url('./images/palm.png');
+}
+
+.parrot {
+  background-image: url('./images/parrot.png');
+}
+
+.pearl {
+  background-image: url('./images/pearl.png');
 }
 
 .card-front,
 .card-back {
     height: 100%;
     width: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
     position: absolute;
 }
 
