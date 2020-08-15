@@ -2,12 +2,11 @@ import React from 'react';
 import './App.css';
 
 function Card(props) {
-  const classNames = props.cardFront + " card-front"
-
+  const frontClassNames = props.cardFront + " card-front"
   return (
     <div className="card" >
-      <div className={classNames}></div>
       <div className="card-back"></div>
+      <div className={frontClassNames}></div>
     </div>
   );
 }
@@ -51,9 +50,16 @@ function App() {
 }
 
 function shuffleCards() {
-  const cards = ['barrel', 'cannon', 'compass', 'flag',
+  let cards = ['barrel', 'cannon', 'compass', 'flag',
     'mermaid', 'telescope', 'palm', 'parrot', 'pearl'];
-  let deck = cards.concat(cards);
+  cards = cards.concat(cards);
+  let deck = [];
+
+  while (cards.length) {
+    let randomNumber = Math.floor(Math.random() * cards.length);
+    const card = cards.splice(randomNumber, 1);
+    deck.push(card);
+  }
   return deck;
 }
 
