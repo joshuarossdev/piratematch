@@ -39,14 +39,24 @@ class Game extends React.Component {
         firstCard: null,
         secondCard: null,
       },
-      cardStatus: {
-        matches: null,
+      pairs: {
+        barrel: null,
+        cannon: null,
+        compass: null,
+        flag: null,
+        mermaid: null,
+        telescope: null,
+        palm: null,
+        parrot: null,
+        pearl: null
       },
       stats: {
         matched: null,
         attempts: null,
         games: null,
-      }
+        wins: null,
+      },
+      level: 1,
     }
   }
 
