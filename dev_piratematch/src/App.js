@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './App.css';
 
 function Card(props) {
-  const frontClassNames = props.cardFront + " card-front"
+  const frontClassNames = props.cardFront + " card-front";
   return (
     <div className="card" >
       <div className="card-back"></div>
@@ -12,9 +12,8 @@ function Card(props) {
 }
 
 class Board extends React.Component {
-
   render() {
-   const deck = shuffleCards().map((card, order) => {
+   const cards = this.props.cards.map((card, order) => {
       return (
           <Card
             key={order + card}
@@ -25,7 +24,7 @@ class Board extends React.Component {
 
     return (
         <div className="cardrow col-10">
-         {deck}
+         {cards}
         </div>
     );
   }
@@ -34,6 +33,21 @@ class Board extends React.Component {
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      cards: shuffleCards(),
+      stats: {
+        matched: null,
+        attempts: null,
+      }
+    }
+  }
+
+  render() {
+    return (
+      <Fragment>
+        <Board cards={this.state.cards} />
+      </Fragment>
+    );
   }
 }
 
@@ -42,7 +56,7 @@ function App() {
     <div className="App">
       <header className="App-header"></header>
       <main className="container">
-        <Board/>
+        <Game/>
       </main>
 
     </div>
@@ -56,7 +70,7 @@ function shuffleCards() {
   let deck = [];
 
   while (cards.length) {
-    let randomNumber = Math.floor(Math.random() * cards.length);
+    const randomNumber = Math.floor(Math.random() * cards.length);
     const card = cards.splice(randomNumber, 1);
     deck.push(card);
   }
