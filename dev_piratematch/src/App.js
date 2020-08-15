@@ -1,12 +1,12 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import './App.css';
 
 function Card(props) {
-  const frontClassNames = props.cardFront + " card-front";
+  const frontCardClasses = props.cardFront + " card-front";
   return (
     <div className="card" >
       <div className="card-back"></div>
-      <div className={frontClassNames}></div>
+      <div className={frontCardClasses}></div>
     </div>
   );
 }
@@ -35,18 +35,26 @@ class Game extends React.Component {
     super(props);
     this.state = {
       cards: shuffleCards(),
+      clicks: {
+        firstCard: null,
+        secondCard: null,
+      },
+      cardStatus: {
+        matches: null,
+      },
       stats: {
         matched: null,
         attempts: null,
+        games: null,
       }
     }
   }
 
   render() {
     return (
-      <Fragment>
+      <div>
         <Board cards={this.state.cards} />
-      </Fragment>
+      </div>
     );
   }
 }
@@ -58,7 +66,6 @@ function App() {
       <main className="container">
         <Game/>
       </main>
-
     </div>
   );
 }
