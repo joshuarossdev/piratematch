@@ -2,10 +2,11 @@ import React from 'react';
 import './App.css';
 
 function Card(props) {
-
   return (
     <div className="card" >
-      <div className={
+      <div
+        onClick={props.onClick}
+        className={
         props.flip ? "card-front " + props.card : "card-back " }>
       </div>
     </div>
@@ -13,13 +14,27 @@ function Card(props) {
 }
 
 class Board extends React.Component {
+  renderCards() {
+    const cards = this.props.cards.map((card, i) => {
+      return (
+        <Card
+          key={i + card}
+          card={card}
+          flip={this.props.cardFlips[i]}
+          onClick={this.props.onClick(i)}
+        />
+      );
+    })
+  }
+
   render() {
-   const cards = this.props.cards.map((card, order) => {
+   const cards = this.props.cards.map((card, i) => {
       return (
           <Card
-            key={order + card}
+            key={i + card}
             card={card}
-            flip={this.props.cardFlips[order]}
+            flip={this.props.cardFlips[i]}
+            onClick={this.props.onClick(i)}
           />
       );
     })
@@ -38,7 +53,7 @@ class Game extends React.Component {
     this.state = {
       cards: shuffleCards(),
       cardClicks: 0,
-      cardFlips: Array(18).fill(true),
+      cardFlips: Array(18).fill(null),
       pairs: [],
       stats: {
         successes: null,
@@ -56,6 +71,7 @@ class Game extends React.Component {
         <Board
         cards={this.state.cards}
         cardFlips={this.state.cardFlips}
+        onClick={e => console.log('e: ', e)}
         />
       </div>
     );
