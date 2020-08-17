@@ -5,6 +5,7 @@ function Card(props) {
   const frontCardClasses = props.cardFront + " card-front";
   return (
     <div className="card" >
+      <div className="card-back"></div>
       <div className={frontCardClasses}></div>
     </div>
   );
@@ -17,6 +18,7 @@ class Board extends React.Component {
           <Card
             key={order + card}
             cardFront={card}
+            flip={this.props.flip}
           />
       );
     })
@@ -34,13 +36,11 @@ class Game extends React.Component {
     super(props);
     this.state = {
       cards: shuffleCards(),
-      clicks: {
-        firstCard: null,
-        secondCard: null,
-      },
+      cardClicks: 0,
+      cardFlips: Array(18).fill(null),
       pairs: [],
       stats: {
-        matches: null,
+        successes: null,
         attempts: null,
         games: null,
         wins: null,
