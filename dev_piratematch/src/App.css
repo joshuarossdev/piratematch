@@ -157,6 +157,9 @@ header {
   visibility: hidden;
 }
 
+.flip {
+  background-color: white;
+}
 
 
 /* .App {
