@@ -14,8 +14,7 @@ function Card(props) {
 }
 
 class Board extends React.Component {
-  renderCards() {
-    const cards = this.props.cards.map((card, i) => {
+  renderCards(card , i) {
       return (
         <Card
           key={i + card}
@@ -24,25 +23,13 @@ class Board extends React.Component {
           onClick={this.props.onClick(i)}
         />
       );
-    })
   }
 
   render() {
-   const cards = this.props.cards.map((card, i) => {
-      return (
-          <Card
-            key={i + card}
-            card={card}
-            flip={this.props.cardFlips[i]}
-            onClick={this.props.onClick(i)}
-          />
-      );
-    })
-
     return (
-        <div className="cardrow col-10">
-         {cards}
-        </div>
+      <div className="cardrow col-10">
+        {this.props.cards.map(( card, i ) => this.renderCards( card, i ))}
+      </div>
     );
   }
 }
@@ -53,7 +40,7 @@ class Game extends React.Component {
     this.state = {
       cards: shuffleCards(),
       cardClicks: 0,
-      cardFlips: Array(18).fill(null),
+      cardFlips: Array(18).fill(true),
       pairs: [],
       stats: {
         successes: null,
