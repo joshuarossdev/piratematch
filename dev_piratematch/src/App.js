@@ -2,31 +2,34 @@ import React from 'react';
 import './App.css';
 
 function Card(props) {
-  const frontCardClasses = props.cardFront + " card-front";
   return (
     <div className="card" >
-      <div className="card-back"></div>
-      <div className={frontCardClasses}></div>
+      <div
+        onClick={props.onClick}
+        className={
+        props.flip ? "card-front " + props.card : "card-back " }>
+      </div>
     </div>
   );
 }
 
 class Board extends React.Component {
-  render() {
-   const cards = this.props.cards.map((card, order) => {
+  renderCards(card , i) {
       return (
-          <Card
-            key={order + card}
-            cardFront={card}
-            flip={this.props.flip}
-          />
+        <Card
+          key={i + card}
+          card={card}
+          flip={this.props.cardFlips[i]}
+          onClick={this.props.onClick(i)}
+        />
       );
-    })
+  }
 
+  render() {
     return (
-        <div className="cardrow col-10">
-         {cards}
-        </div>
+      <div className="cardrow col-10">
+        {this.props.cards.map(( card, i ) => this.renderCards( card, i ))}
+      </div>
     );
   }
 }
@@ -37,7 +40,7 @@ class Game extends React.Component {
     this.state = {
       cards: shuffleCards(),
       cardClicks: 0,
-      cardFlips: Array(18).fill(null),
+      cardFlips: Array(18).fill(true),
       pairs: [],
       stats: {
         successes: null,
@@ -52,7 +55,11 @@ class Game extends React.Component {
   render() {
     return (
       <div>
-        <Board cards={this.state.cards} />
+        <Board
+        cards={this.state.cards}
+        cardFlips={this.state.cardFlips}
+        onClick={e => console.log('e: ', e)}
+        />
       </div>
     );
   }
