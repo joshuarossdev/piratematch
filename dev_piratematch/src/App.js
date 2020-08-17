@@ -19,8 +19,8 @@ class Board extends React.Component {
         <Card
           key={i + card}
           card={card}
-          flip={this.props.cardFlips[i]}
-          onClick={this.props.onClick(i)}
+          flip={this.props.cardsFlipped[i]}
+          onClick={() => this.props.onClick(i)}
         />
       );
   }
@@ -40,7 +40,7 @@ class Game extends React.Component {
     this.state = {
       cards: shuffleCards(),
       cardClicks: 0,
-      cardFlips: Array(18).fill(true),
+      cardsFlipped: Array(18).fill(true),
       pairs: [],
       stats: {
         successes: null,
@@ -52,13 +52,21 @@ class Game extends React.Component {
     }
   }
 
+  handleClick(i) {
+    const cardsFlipped = this.state.cardsFlipped.slice();
+    cardsFlipped[i] = !cardsFlipped[i];
+    this.setState({
+      cardsFlipped: cardsFlipped,
+    })
+  }
+
   render() {
     return (
       <div>
         <Board
         cards={this.state.cards}
-        cardFlips={this.state.cardFlips}
-        onClick={e => console.log('e: ', e)}
+        cardsFlipped={this.state.cardsFlipped}
+        onClick={ (i) => this.handleClick(i)}
         />
       </div>
     );
