@@ -5,7 +5,6 @@ function Card(props) {
   const frontCardClasses = props.cardFront + " card-front";
   return (
     <div className="card" >
-      <div className="card-back"></div>
       <div className={frontCardClasses}></div>
     </div>
   );
@@ -39,19 +38,9 @@ class Game extends React.Component {
         firstCard: null,
         secondCard: null,
       },
-      pairs: {
-        barrel: null,
-        cannon: null,
-        compass: null,
-        flag: null,
-        mermaid: null,
-        telescope: null,
-        palm: null,
-        parrot: null,
-        pearl: null
-      },
+      pairs: [],
       stats: {
-        matched: null,
+        matches: null,
         attempts: null,
         games: null,
         wins: null,
