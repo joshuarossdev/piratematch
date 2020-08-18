@@ -14,13 +14,13 @@ function Card(props) {
 }
 
 class Board extends React.Component {
-  renderCards(card , i) {
+  renderCards(card, i) {
       return (
         <Card
           key={i + card}
           card={card}
           flip={this.props.cardsFlipped[i]}
-          onClick={() => this.props.onClick(card, i)}
+          onClick={() => this.props.onClick(i)}
         />
       );
   }
@@ -28,7 +28,7 @@ class Board extends React.Component {
   render() {
     return (
       <div className="cardrow col-10">
-        {this.props.cards.map(( card, i ) => this.renderCards( card, i ))}
+        {this.props.cards.map( (i) => this.renderCards(i) )}
       </div>
     );
   }
@@ -52,58 +52,120 @@ class Game extends React.Component {
     }
   }
 
-  resetCards() {
+  setFirstCard(i, flip) {
+    const cardsFlipped = this.state.cardsFlipped.slice();
+    cardsFlipped[i] = flip;
 
+    this.setState({
+      firstCard: i,
+      cardsFlipped: cardsFlipped,
+    })
   };
 
+  setSecondCard(i, flip) {
+    const cardsFlipped = this.state.cardsFlipped.slice();
+    cardsFlipped[i] = flip;
 
+    this.setState({
+      secondCard: i,
+      cardsFlipped: cardsFlipped,
+    })
+  };
+
+  resetPair() {
+    const cardsFlipped = this.state.cardsFlipped.slice();
+    const firstCard = this.state.firstCard;
+    const secondCard = this.state.secondCard;
+    cardsFlipped[firstCard] = false;
+    cardsFlipped[secondCard] = false;
+
+    this.setState({
+      clicks: 0,
+      firstCard: null,
+      secondCard: null,
+      cardsFlipped: cardsFlipped,
+    });
+  }
+
+  handlePair() {
+    const cards = this.state.cards.slice();
+    const cardsFlipped = this.state.cardsFlipped.slice();
+    const pairs = this.state.pairs.slice();
+    const firstCard = this.state.firstCard;
+    const secondCard = this.state.secondCard;
+    const matches = this.state.matches;
+
+    if ( cards[firstCard] === cards[secondCard] ) {
+
+      matches++
+      pairs.push(cards[firstCard]);
+      this.setState({
+        firstCard: null,
+        secondCard: null,
+        pairs: pairs,
+        matches: matches,
+      });
+
+    } else {
+      this.resetPair();
+      // console.log('no')
+      // cardsFlipped[firstCard] = false;
+      // cardsFlipped[i] = false;
+      // attempts++;
+      // this.setState({
+      //   firstCard: null,
+      //   secondCard: null,
+      //   cardsFlipped: cardsFlipped,
+      //   attempts: attempts,
+      //   matches: matches,
+      // });
+    };
+  }
 
   handleClick(i) {
-    const cardsFlipped = this.state.cardsFlipped.slice();
-    let firstCard = this.state.firstCard;
-    let secondCard = this.state.secondCard;
+    // const cardsFlipped = this.state.cardsFlipped.slice();
+    // let firstCard = this.state.firstCard;
+    // let secondCard = this.state.secondCard;
     let attempts = this.state.attempts;
     let matches = this.state.matches;
     let pairs = this.state.pairs.slice();
+    let clicks = this.state.clicks + 1
 
-    if (this.state.clicks < 2) {
-      cardsFlipped[i] = true;
-      this.setState({
-        firstCard: i,
-        cardsFlipped: cardsFlipped,
-      })
+    if (clicks < 2) {
+      this.setFirstCard(i, true);
 
-    } else if (this.state.clicks === 2) {
-      const firstCard = this.state.firstCard
-      console.log(firstCard);
-      console.log(this.state.cards[i]);
+    } else if (clicks === 2) {
+      attempts++;
+      this.setSecondCard(i, true);
+      this.handlePair();
 
-      if ( firstCard === secondCard ) {
-        console.log('yes');
-        cardsFlipped[i] = true;
-        matches++
-        attempts++
-        this.setState({
-          firstCard: null,
-          secondCard: null,
-          cardsFlipped: cardsFlipped,
-          attempts: attempts,
-          matches: matches,
-        });
-      } else {
-        console.log('no')
-        cardsFlipped[firstCard] = false;
-        cardsFlipped[i] = false;
-        attempts++;
-        this.setState({
-          firstCard: null,
-          secondCard: null,
-          cardsFlipped: cardsFlipped,
-          attempts: attempts,
-          matches: matches,
-        });
-      };
+      // if ( firstCard === secondCard ) {
+      //   console.log('yes');
+      //   cardsFlipped[i] = true;
+      //   matches++
+      //   attempts++
+      //   this.setState({
+      //     firstCard: null,
+      //     secondCard: null,
+      //     cardsFlipped: cardsFlipped,
+      //     attempts: attempts,
+      //     matches: matches,
+      //   });
+      // } else {
+      //   console.log('no')
+      //   cardsFlipped[firstCard] = false;
+      //   cardsFlipped[i] = false;
+      //   attempts++;
+      //   this.setState({
+      //     firstCard: null,
+      //     secondCard: null,
+      //     cardsFlipped: cardsFlipped,
+      //     attempts: attempts,
+      //     matches: matches,
+      //   });
+      // };
     }
+
     const level = this.state.level;
     let wins = this.state.wins;
 
@@ -119,7 +181,7 @@ class Game extends React.Component {
         <Board
         cards={this.state.cards}
         cardsFlipped={this.state.cardsFlipped}
-        onClick={ (card, i) => this.handleClick( card, i)}
+        onClick={ (i) => this.handleClick(i) }
         />
         <div>
           <h2>{"Attempts: " + this.state.attempts}</h2>
