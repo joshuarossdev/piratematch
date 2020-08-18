@@ -19,7 +19,7 @@ header {
 .card{
     height: 20vmin;
     width: 20vmin;
-    background-color: red;
+    /* background-color: red; */
     position: relative;
 }
 

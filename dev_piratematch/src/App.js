@@ -39,11 +39,9 @@ class Game extends React.Component {
     super(props);
     this.state = {
       cards: shuffleCards(),
-      firstCard: {
-        location: null,
-        card: null,
-      },
-      firstChoice: false,
+      clicks: 0,
+      firstCard: null,
+      SecondCard: null,
       cardsFlipped: Array(18).fill(null),
       pairs: [],
       matches: 0,
@@ -54,56 +52,52 @@ class Game extends React.Component {
     }
   }
 
-  handleClick(card, i) {
+  resetCards() {
+
+  };
+
+
+
+  handleClick(i) {
     const cardsFlipped = this.state.cardsFlipped.slice();
-    let firstChoice = this.state.firstChoice;
+    let firstCard = this.state.firstCard;
+    let secondCard = this.state.secondCard;
     let attempts = this.state.attempts;
     let matches = this.state.matches;
     let pairs = this.state.pairs.slice();
 
-    if (!firstChoice) {
+    if (this.state.clicks < 2) {
       cardsFlipped[i] = true;
       this.setState({
-        firstChoice: true,
-        firstCard: {
-          location: i,
-          card: card[0],
-        },
+        firstCard: i,
         cardsFlipped: cardsFlipped,
       })
 
-    } else if (firstChoice) {
-      const firstCard = this.state.firstCard.card;
-      const firstLocation = this.state.firstCard.location;
+    } else if (this.state.clicks === 2) {
+      const firstCard = this.state.firstCard
       console.log(firstCard);
-      console.log(card[0]);
+      console.log(this.state.cards[i]);
 
-      if (firstCard === card[0] ) {
+      if ( firstCard === secondCard ) {
         console.log('yes');
         cardsFlipped[i] = true;
         matches++
         attempts++
         this.setState({
-          firstChoice: false,
-          firstCard: {
-            location: null,
-            card: null,
-          },
+          firstCard: null,
+          secondCard: null,
           cardsFlipped: cardsFlipped,
           attempts: attempts,
           matches: matches,
         });
       } else {
         console.log('no')
-        cardsFlipped[firstLocation] = false;
+        cardsFlipped[firstCard] = false;
         cardsFlipped[i] = false;
         attempts++;
         this.setState({
-          firstChoice: false,
-          firstCard: {
-            location: null,
-            card: null,
-          },
+          firstCard: null,
+          secondCard: null,
           cardsFlipped: cardsFlipped,
           attempts: attempts,
           matches: matches,
