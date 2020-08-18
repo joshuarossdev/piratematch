@@ -39,11 +39,12 @@ class Game extends React.Component {
     super(props);
     this.state = {
       cards: shuffleCards(),
-      cardClicks: 0,
-      cardsFlipped: Array(18).fill(true),
+      firstCard: null,
+      secondClick: false,
+      cardsFlipped: Array(18).fill(null),
       pairs: [],
       stats: {
-        successes: null,
+        matches: null,
         attempts: null,
         games: null,
         wins: null,
@@ -54,10 +55,31 @@ class Game extends React.Component {
 
   handleClick(i) {
     const cardsFlipped = this.state.cardsFlipped.slice();
-    cardsFlipped[i] = !cardsFlipped[i];
-    this.setState({
-      cardsFlipped: cardsFlipped,
-    })
+    let secondClick = this.state.secondClick;
+    let attempts = this.state.stats.attempts;
+
+    if (!secondClick) {
+      const firstCard = i;
+      secondClick = true;
+      cardsFlipped[i] = true;
+      this.setState({
+        secondClick: secondClick,
+        firstCard: firstCard,
+        cardsFlipped: cardsFlipped,
+      })
+
+    } else if (secondClick) {
+      attempts++
+      secondClick = false;
+      cardsFlipped[i] = true;
+
+      this.setState({
+        secondClick: secondClick,
+        firstCard: null,
+        cardsFlipped: cardsFlipped,
+      })
+
+    }
   }
 
   render() {
