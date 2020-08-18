@@ -6,8 +6,8 @@ function Card(props) {
     <div className="card" >
       <div
         onClick={props.onClick}
-        className={
-        props.flip ? "card-front " + props.card : "card-back " }>
+        className={ props.flip ? "card-front " + props.card : "card-back " }
+      >
       </div>
     </div>
   );
@@ -20,7 +20,7 @@ class Board extends React.Component {
           key={i + card}
           card={card}
           flip={this.props.cardsFlipped[i]}
-          onClick={() => this.props.onClick(i)}
+          onClick={() => this.props.onClick(card, i)}
         />
       );
   }
@@ -39,46 +39,83 @@ class Game extends React.Component {
     super(props);
     this.state = {
       cards: shuffleCards(),
-      firstCard: null,
-      secondClick: false,
+      firstCard: {
+        location: null,
+        card: null,
+      },
+      firstChoice: false,
       cardsFlipped: Array(18).fill(null),
       pairs: [],
-      stats: {
-        matches: null,
-        attempts: null,
-        games: null,
-        wins: null,
-      },
+      matches: 0,
+      attempts: 0,
+      games: null,
+      wins: 0,
       level: 1,
     }
   }
 
-  handleClick(i) {
+  handleClick(card, i) {
     const cardsFlipped = this.state.cardsFlipped.slice();
-    let secondClick = this.state.secondClick;
-    let attempts = this.state.stats.attempts;
+    let firstChoice = this.state.firstChoice;
+    let attempts = this.state.attempts;
+    let matches = this.state.matches;
+    let pairs = this.state.pairs.slice();
 
-    if (!secondClick) {
-      const firstCard = i;
-      secondClick = true;
+    if (!firstChoice) {
       cardsFlipped[i] = true;
       this.setState({
-        secondClick: secondClick,
-        firstCard: firstCard,
+        firstChoice: true,
+        firstCard: {
+          location: i,
+          card: card[0],
+        },
         cardsFlipped: cardsFlipped,
       })
 
-    } else if (secondClick) {
-      attempts++
-      secondClick = false;
-      cardsFlipped[i] = true;
+    } else if (firstChoice) {
+      const firstCard = this.state.firstCard.card;
+      const firstLocation = this.state.firstCard.location;
+      console.log(firstCard);
+      console.log(card[0]);
 
-      this.setState({
-        secondClick: secondClick,
-        firstCard: null,
-        cardsFlipped: cardsFlipped,
-      })
+      if (firstCard === card[0] ) {
+        console.log('yes');
+        cardsFlipped[i] = true;
+        matches++
+        attempts++
+        this.setState({
+          firstChoice: false,
+          firstCard: {
+            location: null,
+            card: null,
+          },
+          cardsFlipped: cardsFlipped,
+          attempts: attempts,
+          matches: matches,
+        });
+      } else {
+        console.log('no')
+        cardsFlipped[firstLocation] = false;
+        cardsFlipped[i] = false;
+        attempts++;
+        this.setState({
+          firstChoice: false,
+          firstCard: {
+            location: null,
+            card: null,
+          },
+          cardsFlipped: cardsFlipped,
+          attempts: attempts,
+          matches: matches,
+        });
+      };
+    }
+    const level = this.state.level;
+    let wins = this.state.wins;
 
+    if (matches >= level) {
+      wins++;
+      this.setState({ wins: wins, });
     }
   }
 
@@ -88,8 +125,13 @@ class Game extends React.Component {
         <Board
         cards={this.state.cards}
         cardsFlipped={this.state.cardsFlipped}
-        onClick={ (i) => this.handleClick(i)}
+        onClick={ (card, i) => this.handleClick( card, i)}
         />
+        <div>
+          <h2>{"Attempts: " + this.state.attempts}</h2>
+          <h2>{"Matches: " + this.state.matches}</h2>
+          <h2>{"Wins: " + this.state.wins}</h2>
+        </div>
       </div>
     );
   }
