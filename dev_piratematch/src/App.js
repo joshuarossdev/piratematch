@@ -6,7 +6,10 @@ function Card(props) {
     <div className="card" >
       <div
         onClick={props.onClick}
-        className={ props.flip ? "card-front " + props.card : "card-back " }
+        className={
+          props.cardStyle ? `card-front ${props.card} ${props.cardStyle}`
+            : `card-back`
+        }
       >
       </div>
     </div>
@@ -19,7 +22,7 @@ class Board extends React.Component {
         <Card
           key={i + card}
           card={card}
-          flip={this.props.cardsFlipped[i]}
+          cardStyle={this.props.cardStyles[i]}
           onClick={() => this.props.onClick(i)}
         />
       );
@@ -41,9 +44,8 @@ class Game extends React.Component {
       cards: shuffleCards(),
       clicks: 0,
       firstCard: null,
-      secondCard: null,
-      cardsFlipped: Array(18).fill(null),
-      pairs: ['pearl'],
+      cardStyles: Array(18).fill(null),
+      pairs: [],
       matches: 0,
       attempts: 0,
       games: null,
@@ -54,47 +56,46 @@ class Game extends React.Component {
 
   setFirstCard(i, flip) {
     console.log('setFirstCard: ', i, flip);
-    const cardsFlipped = this.state.cardsFlipped.slice();
-    cardsFlipped[i] = flip;
+    const cardStyles = this.state.cardStyles.slice();
+    cardStyles[i] = flip;
     this.setState({
       firstCard: i,
-      cardsFlipped: cardsFlipped,
+      cardStyles: cardStyles,
     })
   };
 
   setSecondCard(i, flip) {
     console.log('setSecondCard', i, flip);
-    const cardsFlipped = this.state.cardsFlipped.slice();
+    const cardStyles = this.state.cardStyles.slice();
     let attempts = this.state.attempts;
     attempts++;
-    cardsFlipped[i] = flip;
+    cardStyles[i] = flip;
     this.setState({
-      secondCard: i,
-      cardsFlipped: cardsFlipped,
+      cardStyles: cardStyles,
       attempts: attempts,
     })
   };
 
   resetPair() {
     console.log('resetPair');
-    const cardsFlipped = this.state.cardsFlipped.slice();
+    const cardStyles = this.state.cardStyles.slice();
     const firstCard = this.state.firstCard;
     const secondCard = this.state.secondCard;
-    cardsFlipped[firstCard] = false;
-    cardsFlipped[secondCard] = false;
+    cardStyles[firstCard] = false;
+    cardStyles[secondCard] = false;
 
     this.setState({
       clicks: 0,
       firstCard: null,
       secondCard: null,
-      // cardsFlipped: cardsFlipped,
+      // cardStyles: cardStyles,
     });
   }
 
   checkForMatch( card ) {
     console.log('checkForMatch', card);
     const cards = this.state.cards.slice();
-    const cardsFlipped = this.state.cardsFlipped.slice();
+    const cardStyles = this.state.cardStyles.slice();
     const pairs = this.state.pairs.slice();
     const firstCard = this.state.firstCard;
     const secondCard = this.state.secondCard;
@@ -161,7 +162,7 @@ class Game extends React.Component {
       <div>
         <Board
         cards={this.state.cards}
-        cardsFlipped={this.state.cardsFlipped}
+        cardStyles={this.state.cardStyles}
         onClick={ (i) => this.handleClick(this.state.cards[i], i) }
         />
         <div>
