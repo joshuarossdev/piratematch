@@ -43,7 +43,7 @@ class Game extends React.Component {
       firstCard: null,
       secondCard: null,
       cardsFlipped: Array(18).fill(null),
-      pairs: [],
+      pairs: ['pearl'],
       matches: 0,
       attempts: 0,
       games: null,
@@ -63,7 +63,7 @@ class Game extends React.Component {
   };
 
   setSecondCard(i, flip) {
-    console.log('setSecondCard', i, true);
+    console.log('setSecondCard', i, flip);
     const cardsFlipped = this.state.cardsFlipped.slice();
     let attempts = this.state.attempts;
     attempts++;
@@ -80,14 +80,14 @@ class Game extends React.Component {
     const cardsFlipped = this.state.cardsFlipped.slice();
     const firstCard = this.state.firstCard;
     const secondCard = this.state.secondCard;
-    // cardsFlipped[firstCard] = false;
-    // cardsFlipped[secondCard] = false;
+    cardsFlipped[firstCard] = false;
+    cardsFlipped[secondCard] = false;
 
     this.setState({
       clicks: 0,
       firstCard: null,
       secondCard: null,
-      cardsFlipped: cardsFlipped,
+      // cardsFlipped: cardsFlipped,
     });
   }
 
@@ -107,6 +107,7 @@ class Game extends React.Component {
       console.log('pairs: ', pairs);
       matches++
       this.setState({
+        clicks: 0,
         firstCard: null,
         secondCard: null,
         pairs: pairs,
@@ -133,8 +134,11 @@ class Game extends React.Component {
 
   handleClick(card, i) {
     console.log('handleClick: ', card, i);
+    const pairs = this.state.pairs.slice();
     let attempts = this.state.attempts;
     let clicks = this.state.clicks;
+
+    if ( pairs.includes(card) ) return;
 
     if (clicks === 0) {
       clicks++
@@ -148,8 +152,7 @@ class Game extends React.Component {
       console.log('clicks: ', clicks);
 
       this.setSecondCard(i, true);
-      // this.checkForMatch(card, i);
-      // this.setState({ attempts: attempts++ });
+      this.checkForMatch(card, i);
     } else return;
   }
 
