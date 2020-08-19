@@ -65,10 +65,13 @@ class Game extends React.Component {
   setSecondCard(i, flip) {
     console.log('setSecondCard', i, true);
     const cardsFlipped = this.state.cardsFlipped.slice();
+    let attempts = this.state.attempts;
+    attempts++;
     cardsFlipped[i] = flip;
     this.setState({
       secondCard: i,
       cardsFlipped: cardsFlipped,
+      attempts: attempts,
     })
   };
 
@@ -96,6 +99,7 @@ class Game extends React.Component {
     const firstCard = this.state.firstCard;
     const secondCard = this.state.secondCard;
     let matches = this.state.matches;
+
 
     if ( cards[firstCard] === card ) {
     console.log('pair match')
@@ -144,7 +148,7 @@ class Game extends React.Component {
       console.log('clicks: ', clicks);
 
       this.setSecondCard(i, true);
-      // this.handlePair(card, i);
+      // this.checkForMatch(card, i);
       // this.setState({ attempts: attempts++ });
     } else return;
   }
