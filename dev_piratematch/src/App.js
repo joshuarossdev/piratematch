@@ -6,10 +6,7 @@ function Card( props ) {
     <div className="card" >
       <div
         onClick={props.onClick}
-        className={
-          props.cardStyle ? `card-front ${props.card} ${props.cardStyle}`
-            : `card-back`
-        }
+        className={ props.cardStyle }
       >
       </div>
     </div>
@@ -39,14 +36,13 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       cards: shuffleCards(),
       clicks: 0,
       firstCard: null,
-      cardStyles: Array(18).fill(null),
+      cardStyles: Array(18).fill('card-back'),
       pairs: [],
       matches: 0,
       attempts: 0,
@@ -56,26 +52,24 @@ class Game extends React.Component {
     }
   }
 
-  setFirstCard( i, flip ) {
-
-    console.log('setFirstCard: ', i, flip);
+  setFirstCard( i, cardStyle ) {
     const cardStyles = this.state.cardStyles.slice();
-    cardStyles[i] = flip;
 
+    cardStyles[i] = cardStyle;
+    console.log('setFirstCard: ', i, cardStyle);
     this.setState({
       firstCard: i,
       cardStyles: cardStyles,
     })
   };
 
-  setSecondCard( i, flip )  {
-
-    console.log('setSecondCard', i, flip);
+  setSecondCard( i, cardStyle )  {
     const cardStyles = this.state.cardStyles.slice();
-    cardStyles[i] = flip;
     let attempts = this.state.attempts;
-    attempts++;
 
+    cardStyles[i] = cardStyle;
+    attempts++;
+    console.log('setSecondCard', i, cardStyle);
     this.setState({
       cardStyles: cardStyles,
       attempts: attempts,
@@ -83,12 +77,11 @@ class Game extends React.Component {
   };
 
   resetPair() {
-
-    console.log('resetPair');
     const cardStyles = this.state.cardStyles.slice();
     const firstCard = this.state.firstCard;
-    cardStyles[firstCard] = false;
+    console.log('resetPair');
 
+    cardStyles[firstCard] = false;
     this.setState({
       clicks: 0,
       firstCard: null,
@@ -97,13 +90,12 @@ class Game extends React.Component {
   }
 
   handlePair( card ) {
-
-    console.log('handlePair', card);
     const cards = this.state.cards.slice();
     const firstCard = this.state.firstCard;
     const cardStyles = this.state.cardStyles.slice();
     const pairs = this.state.pairs.slice();
     let matches = this.state.matches;
+    console.log('handlePair', card);
 
     if ( cards[firstCard] === card ) {
       console.log('pair match')
@@ -125,10 +117,9 @@ class Game extends React.Component {
   }
 
   checkForWin( matches ) {
-
-    console.log('checkforWin', matches)
     const level = this.state.level;
     let wins = this.state.wins;
+    console.log('checkforWin', matches)
 
     if (matches >= level) {
       wins++;
@@ -139,9 +130,9 @@ class Game extends React.Component {
 
   handleClick( card, i ) {
 
-    console.log('handleClick: ', card, i);
     const pairs = this.state.pairs.slice();
     let clicks = this.state.clicks;
+    console.log('handleClick: ', card, i);
 
     if ( pairs.includes(card) ) return;
 
@@ -149,13 +140,13 @@ class Game extends React.Component {
       clicks++
       this.setState({ clicks: clicks });
       console.log('clicks: ', clicks);
-      this.setFirstCard(i, true);
+      this.setFirstCard( i, `card-front ${card}` );
 
     } else if (clicks === 1) {
       clicks++
       this.setState({ clicks: clicks });
       console.log('clicks: ', clicks);
-      this.setSecondCard(i, true);
+      this.setSecondCard( i, `card-front ${card}` );
       this.handlePair(card, i);
 
     } else return;
@@ -191,18 +182,16 @@ function App() {
 }
 
 function shuffleCards() {
-
   let cards = ['barrel', 'cannon', 'compass', 'flag',
     'mermaid', 'telescope', 'palm', 'parrot', 'pearl'];
-  cards = cards.concat(cards);
   let deck = [];
 
+  cards = cards.concat(cards);
   while (cards.length) {
     const randomNumber = Math.floor(Math.random() * cards.length);
     const card = cards.splice(randomNumber, 1);
     deck.push(card[0]);
   };
-
   console.log('deck: ', deck);
   return deck;
 }
