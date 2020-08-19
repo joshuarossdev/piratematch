@@ -56,7 +56,6 @@ class Game extends React.Component {
     console.log('setFirstCard: ', i, flip);
     const cardsFlipped = this.state.cardsFlipped.slice();
     cardsFlipped[i] = flip;
-
     this.setState({
       firstCard: i,
       cardsFlipped: cardsFlipped,
@@ -66,9 +65,7 @@ class Game extends React.Component {
   setSecondCard(i, flip) {
     console.log('setSecondCard', i, true);
     const cardsFlipped = this.state.cardsFlipped.slice();
-
     cardsFlipped[i] = flip;
-    console.log('second: ', )
     this.setState({
       secondCard: i,
       cardsFlipped: cardsFlipped,
@@ -80,8 +77,8 @@ class Game extends React.Component {
     const cardsFlipped = this.state.cardsFlipped.slice();
     const firstCard = this.state.firstCard;
     const secondCard = this.state.secondCard;
-    cardsFlipped[firstCard] = false;
-    cardsFlipped[secondCard] = false;
+    // cardsFlipped[firstCard] = false;
+    // cardsFlipped[secondCard] = false;
 
     this.setState({
       clicks: 0,
@@ -91,8 +88,8 @@ class Game extends React.Component {
     });
   }
 
-  handlePair(card ) {
-    console.log('handlePair', card);
+  checkForMatch( card ) {
+    console.log('checkForMatch', card);
     const cards = this.state.cards.slice();
     const cardsFlipped = this.state.cardsFlipped.slice();
     const pairs = this.state.pairs.slice();
@@ -100,13 +97,10 @@ class Game extends React.Component {
     const secondCard = this.state.secondCard;
     let matches = this.state.matches;
 
-    console.log('first: ', cards[firstCard]);
-    console.log('second: ', cards);
-
     if ( cards[firstCard] === card ) {
-
-      console.log('pair match')
+    console.log('pair match')
       pairs.push(cards[firstCard]);
+      console.log('pairs: ', pairs);
       matches++
       this.setState({
         firstCard: null,
@@ -114,7 +108,7 @@ class Game extends React.Component {
         pairs: pairs,
         matches: matches,
       });
-      this.handleWin();
+      this.checkForWin();
 
     } else {
       console.log('no match');
@@ -122,7 +116,7 @@ class Game extends React.Component {
     };
   }
 
-  handleWin() {
+  checkForWin() {
     console.log('handleWin')
     const level = this.state.level;
     let matches = this.state.matches;
@@ -138,17 +132,21 @@ class Game extends React.Component {
     let attempts = this.state.attempts;
     let clicks = this.state.clicks;
 
-
     if (clicks === 0) {
-      this.setFirstCard(i, true);
       clicks++
       this.setState({ clicks: clicks });
+      console.log('clicks: ', clicks);
+
+      this.setFirstCard(i, true);
     } else if (clicks === 1) {
+      clicks++
+      this.setState({ clicks: clicks });
+      console.log('clicks: ', clicks);
 
       this.setSecondCard(i, true);
-      this.handlePair(card, i);
-      this.setState({ attempts: attempts++ });
-    }
+      // this.handlePair(card, i);
+      // this.setState({ attempts: attempts++ });
+    } else return;
   }
 
   render() {
