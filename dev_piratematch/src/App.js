@@ -15,13 +15,13 @@ function Card( props ) {
 
 class Board extends React.Component {
 
-  renderCards( card, i ) {
+  renderCards( order, card ) {
     return (
       <Card
-        key={i + card}
+        key={order + card}
         card={card}
-        cardStyle={this.props.cardStyles[i]}
-        onClick={() => this.props.onClick(i)}
+        cardStyle={this.props.cardStyles[order]}
+        onClick={() => this.props.onClick(order)}
       />
     );
   }
@@ -29,7 +29,7 @@ class Board extends React.Component {
   render() {
     return (
       <div className="cardrow col-10">
-        {this.props.cards.map( (card, i) => this.renderCards(card, i) )}
+        {this.props.cards.map( (card, order) => this.renderCards(order, card) )}
       </div>
     );
   }
@@ -52,40 +52,40 @@ class Game extends React.Component {
     }
   }
 
-  setFirstCard( i, cardStyle ) {
+  setFirstCard( order, cardStyle ) {
     const cardStyles = this.state.cardStyles.slice();
 
-    cardStyles[i] = cardStyle;
-    console.log('setFirstCard: ', i, cardStyle);
+    cardStyles[order] = cardStyle;
+    console.log('setFirstCard: ', order, cardStyle);
     this.setState({
-      firstCard: i,
+      firstCard: order,
       cardStyles: cardStyles,
     })
   };
 
-  setSecondCard( i, cardStyle )  {
+  setSecondCard( order, cardStyle )  {
     const cardStyles = this.state.cardStyles.slice();
     let attempts = this.state.attempts;
 
-    cardStyles[i] = cardStyle;
+    cardStyles[order] = cardStyle;
     attempts++;
-    console.log('setSecondCard', i, cardStyle);
+    console.log('setSecondCard', order, cardStyle);
     this.setState({
       cardStyles: cardStyles,
       attempts: attempts,
     })
   };
 
-  resetPair() {
+  resetPair( card ) {
     const cardStyles = this.state.cardStyles.slice();
     const firstCard = this.state.firstCard;
     console.log('resetPair');
-
-    cardStyles[firstCard] = false;
+    cardStyles[firstCard] = 'card-back delay-flip';
+    cardStyles[card] = 'card-back delay-flip';
     this.setState({
       clicks: 0,
       firstCard: null,
-      secondCard: null,
+      cardStyles: cardStyles,
     });
   }
 
@@ -128,11 +128,10 @@ class Game extends React.Component {
     }
   }
 
-  handleClick( card, i ) {
-
+  handleClick( order, card ) {
     const pairs = this.state.pairs.slice();
     let clicks = this.state.clicks;
-    console.log('handleClick: ', card, i);
+    console.log('handleClick: ', order, card);
 
     if ( pairs.includes(card) ) return;
 
@@ -140,14 +139,14 @@ class Game extends React.Component {
       clicks++
       this.setState({ clicks: clicks });
       console.log('clicks: ', clicks);
-      this.setFirstCard( i, `card-front ${card}` );
+      this.setFirstCard( order, `card-front ${card}` );
 
     } else if (clicks === 1) {
       clicks++
       this.setState({ clicks: clicks });
       console.log('clicks: ', clicks);
-      this.setSecondCard( i, `card-front ${card}` );
-      this.handlePair(card, i);
+      this.setSecondCard( order, `card-front ${card}` );
+      this.handlePair(order, card);
 
     } else return;
   }
@@ -158,11 +157,15 @@ class Game extends React.Component {
         <Board
         cards={this.state.cards}
         cardStyles={this.state.cardStyles}
-        onClick={ (i) => this.handleClick(this.state.cards[i], i) }
+        onClick={ (order) => this.handleClick(this.state.cards[order], order) }
         />
         <div>
           <h2>{"Attempts: " + this.state.attempts}</h2>
           <h2>{"Matches: " + this.state.matches}</h2>
+          <h2>
+            {"Success %: " +
+            Math.floor(this.state.matches / this.attempts * 100)}
+          </h2>
           <h2>{"Wins: " + this.state.wins}</h2>
         </div>
       </div>
