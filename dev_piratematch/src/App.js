@@ -1,7 +1,9 @@
 import React from 'react';
+import { useState } from 'react';
+import { Transition } from 'react-transition-group';
 import './App.css';
 
-import { Transition } from 'react-transition-group';
+
 
 const duration = 300;
 
@@ -35,9 +37,8 @@ function App() {
   return (
     <div>
       <Transition in={inProp} timeout={500}>
-        {state => (
-          // ...
-        )}
+        {state => (Fade(state)
+          )}
       </Transition>
       <button onClick={() => setInProp(true)}>
         Click to Enter

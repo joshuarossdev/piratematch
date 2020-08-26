@@ -1,4 +1,4 @@
-body {
+/* body {
   height: 100vh;
   background-image: url("./images/map.png");
   background-repeat: no-repeat;
@@ -19,7 +19,6 @@ header {
 .card{
     height: 20vmin;
     width: 20vmin;
-    /* background-color: red; */
     position: relative;
 }
 
@@ -153,7 +152,13 @@ header {
         font-size: 1.5rem;
     }
 
+  .no-viz {
+  visibility: hidden;
+}
 
+.flip {
+  background-color: white;
+} */
 
 
 /* .App {
